@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: techoffice-cockpit-api
+  namespace: techoffice
+  labels:
+    app: techoffice-cockpit
+spec:
+  selector:
+    app: techoffice-cockpit
+    component: api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: techoffice-cockpit-ingress
+  namespace: techoffice
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - techoffice.votre-entreprise.com
+      secretName: techoffice-tls
+  rules:
+    - host: techoffice.votre-entreprise.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: techoffice-cockpit-api
+                port:
+                  number: 80
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: techoffice-config
+  namespace: techoffice
+data:
+  qdrant-host: "qdrant-cluster.techoffice.svc.cluster.local"
+  postgres-host: "postgres-primary.techoffice.svc.cluster.local"
+  redis-url: "redis://redis-master.techoffice.svc.cluster.local:6379/0"
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: techoffice-cockpit-api-hpa
+  namespace: techoffice
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: techoffice-cockpit-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80

@@ -1,0 +1,59 @@
+# ─── Core ─────────────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+
+# ─── API ──────────────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
+
+# ─── HTTP ─────────────────────────────────────────────────────────────────────
+httpx>=0.27.0
+tenacity>=8.3.0
+
+# ─── LangChain ────────────────────────────────────────────────────────────────
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-community>=0.2.0
+langchain-anthropic>=0.1.13
+langchain-openai>=0.1.8
+langchain-text-splitters>=0.2.0
+
+# ─── LLM Providers ────────────────────────────────────────────────────────────
+anthropic>=0.28.0
+openai>=1.30.0
+
+# ─── Vector DB ────────────────────────────────────────────────────────────────
+qdrant-client>=1.9.0
+
+# ─── Embeddings ───────────────────────────────────────────────────────────────
+sentence-transformers>=3.0.0
+torch>=2.2.0          # requis par sentence-transformers
+
+# ─── Document Processing ──────────────────────────────────────────────────────
+unstructured[pdf,docx]>=0.13.0
+PyPDF2>=3.0.1
+python-docx>=1.1.0
+pdfplumber>=0.11.0
+
+# ─── Database ─────────────────────────────────────────────────────────────────
+asyncpg>=0.29.0
+sqlalchemy[asyncio]>=2.0.30
+
+# ─── Queue ────────────────────────────────────────────────────────────────────
+celery[redis]>=5.3.0
+redis>=5.0.0
+
+# ─── Object Storage ───────────────────────────────────────────────────────────
+minio>=7.2.0
+
+# ─── Observabilité ────────────────────────────────────────────────────────────
+langfuse>=2.20.0
+prometheus-client>=0.20.0
+
+# ─── Tests ────────────────────────────────────────────────────────────────────
+pytest>=8.2.0
+pytest-asyncio>=0.23.0
+pytest-mock>=3.14.0
+httpx>=0.27.0         # client test FastAPI
